@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net6.0</TargetFramework>
+        <RootNamespace>OffloadingAgent</RootNamespace>
+        <AssemblyName>OffloadingAgent</AssemblyName>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <!-- Add package references here -->
+        <!-- Example: <PackageReference Include="Newtonsoft.Json" Version="13.0.1" /> -->
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- Add project references here if needed -->
+        <!-- Example: <ProjectReference Include="..\OtherProject\OtherProject.csproj" /> -->
+    </ItemGroup>
+
+</Project>

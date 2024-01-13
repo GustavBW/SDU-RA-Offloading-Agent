@@ -432,3 +432,7 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+.idea/.idea.SDU-RA-Offloading-Agent.dir/.idea/indexLayout.xml
+.idea/.idea.SDU-RA-Offloading-Agent.dir/.idea/encodings.xml
+.idea/.idea.SDU-RA-Offloading-Agent.dir/.idea/vcs.xml
+.idea/.idea.SDU-RA-Offloading-Agent.dir/.idea/vcs.xml
