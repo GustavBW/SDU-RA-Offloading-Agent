@@ -9,8 +9,8 @@
 
     <ItemGroup><!-- Add package references here -->
         <!-- Example: <PackageReference Include="Newtonsoft.Json" Version="13.0.1" /> -->
-    
-      <Folder Include="OffloadingAgent.Tests\" />
+
+        <Folder Include="OffloadingAgent.Tests\"/>
     </ItemGroup>
 
     <ItemGroup>
