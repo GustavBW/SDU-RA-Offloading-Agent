@@ -7,9 +7,10 @@
         <AssemblyName>OffloadingAgent</AssemblyName>
     </PropertyGroup>
 
-    <ItemGroup>
-        <!-- Add package references here -->
+    <ItemGroup><!-- Add package references here -->
         <!-- Example: <PackageReference Include="Newtonsoft.Json" Version="13.0.1" /> -->
+    
+      <Folder Include="OffloadingAgent.Tests\" />
     </ItemGroup>
 
     <ItemGroup>
