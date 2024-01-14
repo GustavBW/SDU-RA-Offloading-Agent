@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OffloadingAgent;
+namespace NNAgent;
 
 public class NamedVoidAction
 {

@@ -1,4 +1,4 @@
-﻿namespace OffloadingAgent;
+﻿namespace NNAgent;
 
 public interface SomeInterface
 {

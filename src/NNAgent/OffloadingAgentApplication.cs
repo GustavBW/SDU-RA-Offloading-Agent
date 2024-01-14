@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace OffloadingAgent;
+namespace NNAgent;
 
 public class OffloadingAgentApplication
 {
@@ -16,7 +16,7 @@ public class OffloadingAgentApplication
     private static void Main(string[] args)
     {
         Console.WriteLine("RA-OA: Starting Application");
-        addShutdownHook(new NamedVoidAction("Func1", () => Console.WriteLine("I'm a hooker")));
+        addShutdownHook(new NamedVoidAction("Func1", () => Console.WriteLine("I'm hooked")));
         //code here
 
         foreach (var action in onShutdownDo)
