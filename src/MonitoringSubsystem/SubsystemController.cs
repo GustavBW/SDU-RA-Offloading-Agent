@@ -1,11 +1,13 @@
 ﻿using System;
+using Monitoring;
 
 namespace MonitoringSubsystem;
 
 public class SubsystemController
 {
-    static void Main(string[] args)
+    public static void Init()
     {
-        Console.WriteLine("Monitoring Subsystem present");
+        Console.WriteLine("[MSC] Initizalizing ");
+        Console.WriteLine("[MSC] Using Monitoring version: " + Monitoring.ModuleInfo.VERSION);
     }
 }
