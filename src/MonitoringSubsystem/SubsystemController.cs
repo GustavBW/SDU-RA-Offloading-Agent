@@ -8,19 +8,18 @@ public class SubsystemController
 {
     private static Thread _subsystemThread;
     private static SubsystemController _instance;
-    public static volatile bool ShouldRun = true;
+    private static volatile bool ShouldRun = true;
     private uint _pollRate;
     
     /**
-     * Spawns a new thread, and initializes a subsystem on this thread.
-     * Don't call this method more than once, since the instance returned by GetInstance() will be replaced each time. <br/>
+     * Spawns a new thread, and initializes a subsystem on this thread. <br/>
      * pollRate, uint32, default = 1000, how many times a second to try and update all monitored values. 
      */
     public static void Init(uint pollRate = 1000)
     {
-        if (_instance != null)
+        if (_instance != null && _subsystemThread != null)
         {
-            Console.Error.WriteLine("Ignored foolish attempt to re-initialize already running subsystem. pff.");
+            Console.Error.WriteLine("[MSC] Ignored foolish attempt to re-initialize already running subsystem. pff.");
             return;
         }
         Console.WriteLine("[MSC] Initizalizing ");
@@ -30,17 +29,38 @@ public class SubsystemController
         _subsystemThread.Start();
     }
 
+    public static void Stop()
+    {
+        ShouldRun = false;
+        _subsystemThread.Join();
+    }
+
     private void Start()
     {
-        _instance = this;
         Console.WriteLine("[MSC] SubsystemThread is: " + _subsystemThread + "#" + _subsystemThread.GetHashCode());
         Console.WriteLine("[MSC] Subsystem instance is: " + _instance + "#" + _instance.GetHashCode());
-        
+
         while (ShouldRun)
         {
+            long msLastUpdateRisingEdge = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
             
-        }
+            //Stuff here
 
+  
+            Sleep(msLastUpdateRisingEdge, _pollRate);
+        }
+        
+        Console.WriteLine("[MSC] Subsystem shutdown");
+    }
+
+    private void Sleep(long msLastUpdateRisingEdge, uint pollRate)
+    {
+        //msPerRefresh - deltaTime 
+        long msToSleep = (1000 / pollRate) - (DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - msLastUpdateRisingEdge); 
+        if (msToSleep > 0)
+        {
+            Thread.Sleep((int)msToSleep);
+        }
     }
     
     /**
@@ -54,5 +74,6 @@ public class SubsystemController
     private SubsystemController(uint pollRate)
     {
         this._pollRate = pollRate;
+        _instance = this;
     }
 }

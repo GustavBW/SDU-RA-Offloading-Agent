@@ -9,9 +9,10 @@ public class OffloadingAgentApplication
     private static void Main(string[] args)
     {
         Console.WriteLine("[RA-OA] Starting Application");
-        MonitoringSubsystem.SubsystemController.Init();
+        MonitoringSubsystem.SubsystemController.Init(1);
         //The subsystem is now running and offloadet to its own thread. You can do anything below this point without interfering.
         
+        MonitoringSubsystem.SubsystemController.Stop();
         Console.WriteLine("[RA-OA] Application shutdown");
     }
 }
