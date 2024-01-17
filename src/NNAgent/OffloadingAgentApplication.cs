@@ -18,11 +18,11 @@ public class OffloadingAgentApplication
         if (initAttempt.Item2 != null)
         {
             _shouldRun = false;
+            Console.Error.WriteLine("[RA-OA] Failed to initialize daemon: " + initAttempt.Item2.Message);
         }
         
         while (_shouldRun)
         {
-            Console.WriteLine("[RA-OA] ..is feeling sleepy");
             Thread.Sleep(1000);
         }
         

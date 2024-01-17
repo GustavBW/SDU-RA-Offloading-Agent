@@ -13,7 +13,7 @@ public class MonitoringConnector
         
         bool connectionEstablished = true;
         bool completeConnectionFailure = false;
-        int secondsToSleepBeforeTryingAgain = 2;
+        double secondsToSleepBeforeTryingAgain = 2;
         uint failedAttempts = 0;
         Exception latestError = null;
         
@@ -34,9 +34,9 @@ public class MonitoringConnector
                 {
                     connectionEstablished = false;
                     failedAttempts++;
-                    Console.Error.WriteLine("[MC] Unable to connect. Trying again in " + secondsToSleepBeforeTryingAgain + " seconds...");
-                    Thread.Sleep(secondsToSleepBeforeTryingAgain * 1000);
-                    secondsToSleepBeforeTryingAgain = (int) Math.Pow(secondsToSleepBeforeTryingAgain, 1.5);
+                    Console.Error.WriteLine("[MC] Unable to connect. Trying again in " + Math.Round(secondsToSleepBeforeTryingAgain) + " seconds...");
+                    Thread.Sleep((int) secondsToSleepBeforeTryingAgain * 1000);
+                    secondsToSleepBeforeTryingAgain = Math.Pow(secondsToSleepBeforeTryingAgain, 1.5);
                 }
             }
         } while (!connectionEstablished && !completeConnectionFailure);
