@@ -1,23 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using MonitoringSubsystem;
+using Common.Models;
+using MonitoringDaemon;
 
 namespace NNAgent;
 
 public class OffloadingAgentApplication
 {
     private static bool _shouldRun = true;
-
-    private static Action<Exception> _onIrrevocableError = e =>
-    {
-        Console.Error.WriteLine("[RA-OA] System Failure: " + e.Message);
-        _shouldRun = false;
-    };
+    
     private static void Main(string[] args)
     {
         Console.WriteLine("[RA-OA] Starting Application");
-        MonitoringSubsystem.SubsystemController.Init(_onIrrevocableError, 1,3);
+        Tuple<StateCache, Exception> initAttempt = SubsystemController.Init( 1,3);
+
+        if (initAttempt.Item2 != null)
+        {
+            _shouldRun = false;
+        }
         
         while (_shouldRun)
         {
@@ -26,7 +27,7 @@ public class OffloadingAgentApplication
         }
         
         
-        MonitoringSubsystem.SubsystemController.Stop();
+        MonitoringDaemon.SubsystemController.Stop();
         Console.WriteLine("[RA-OA] Application shutdown");
     }
 }

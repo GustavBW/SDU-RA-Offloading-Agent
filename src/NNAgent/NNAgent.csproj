@@ -2,9 +2,10 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net7.0</TargetFramework>
         <RootNamespace>NNAgent</RootNamespace>
         <AssemblyName>NNAgent</AssemblyName>
+        <LangVersion>11</LangVersion>
     </PropertyGroup>
 
     <ItemGroup><!-- Add package references here -->
@@ -16,7 +17,7 @@
     <ItemGroup>
         <!-- Add project references here if needed -->
         <!-- Example: <ProjectReference Include="..\OtherProject\OtherProject.csproj" /> -->
-        <ProjectReference Include="..\MonitoringSubsystem\MonitoringSubsystem.csproj" />
+        <ProjectReference Include="..\MonitoringDaemon\MonitoringDaemon.csproj" />
     </ItemGroup>
 
     <ItemGroup>

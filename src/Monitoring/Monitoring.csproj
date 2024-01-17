@@ -1,10 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <OutputType>Library</OutputType>
-        <TargetFramework>net6.0</TargetFramework>
+        <OutputType>Module</OutputType>
+        <TargetFramework>net7.0</TargetFramework>
         <RootNamespace>Monitoring</RootNamespace>
         <AssemblyName>Monitoring</AssemblyName>
+        <LangVersion>11</LangVersion>
     </PropertyGroup>
 
     <ItemGroup><!-- Add package references here -->
@@ -30,6 +31,10 @@
 
 
         <PackageReference Include="RsInstrument" Version="1.18.1"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Common\Common.csproj" />
     </ItemGroup>
 
 </Project>

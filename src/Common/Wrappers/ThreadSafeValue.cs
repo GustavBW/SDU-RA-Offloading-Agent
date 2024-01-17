@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Text.Json.Serialization;
 
 namespace MonitoringSubsystem;
 
 public class ThreadSafeValue<T>
 {
+    [JsonInclude]
     private T _value;
     private readonly object _mutex = new();
 
@@ -16,7 +18,7 @@ public class ThreadSafeValue<T>
     {
         return new ThreadSafeValue<T>(value);
     }
-
+    
     public T Get()
     {
         lock (_mutex)

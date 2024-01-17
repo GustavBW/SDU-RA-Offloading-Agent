@@ -1,4 +1,4 @@
-﻿namespace MonitoringSubsystem;
+﻿namespace MonitoringDaemon;
 
 public class ModuleInfo
 {

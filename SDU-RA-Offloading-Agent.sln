@@ -7,7 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{493E6FAC-4E5
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Monitoring", "src\Monitoring\Monitoring.csproj", "{8227E85A-F189-4D1A-85D7-04051B817FCD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonitoringSubsystem", "src\MonitoringSubsystem\MonitoringSubsystem.csproj", "{DC0959C0-8E40-44FC-923E-AD9AD0D5CFF8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonitoringDaemon", "src\MonitoringDaemon\MonitoringDaemon.csproj", "{DC0959C0-8E40-44FC-923E-AD9AD0D5CFF8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NNAgent", "src\NNAgent\NNAgent.csproj", "{CF8EFF8B-EA7E-4BAF-833A-202554BC19A3}"
 EndProject

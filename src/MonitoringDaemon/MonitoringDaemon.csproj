@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <OutputType>Library</OutputType>
-        <TargetFramework>net6.0</TargetFramework>
-        <RootNamespace>MonitoringSubsystem</RootNamespace>
-        <AssemblyName>MonitoringSubsystem</AssemblyName>
+        <OutputType>Module</OutputType>
+        <TargetFramework>net7.0</TargetFramework>
+        <LangVersion>11</LangVersion>
+        <PackageId>MonitoringDaemon</PackageId>
     </PropertyGroup>
 
     <ItemGroup><!-- Add package references here -->
@@ -16,6 +16,7 @@
     <ItemGroup>
         <!-- Add project references here if needed -->
         <!-- Example: <ProjectReference Include="..\OtherProject\OtherProject.csproj" /> -->
+        <ProjectReference Include="..\Common\Common.csproj" />
         <ProjectReference Include="..\Monitoring\Monitoring.csproj" />
     </ItemGroup>
 
