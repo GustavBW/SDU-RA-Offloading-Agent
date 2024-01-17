@@ -9,13 +9,12 @@ public class SubsystemController
     private static Thread _subsystemThread;
     private static SubsystemController _instance;
     private static volatile bool ShouldRun = true;
-    private uint _pollRate;
-    
+
     /**
      * Spawns a new thread, and initializes a subsystem on this thread. <br/>
      * pollRate, uint32, default = 1000, how many times a second to try and update all monitored values. 
      */
-    public static void Init(uint pollRate = 1000)
+    public static void Init(Action<Exception> onIrrevocableError, uint pollRate = 1000, uint maxConnectionAttempts = 10)
     {
         if (_instance != null && _subsystemThread != null)
         {
@@ -25,7 +24,7 @@ public class SubsystemController
         Console.WriteLine("[MSC] Initizalizing ");
         Console.WriteLine("[MSC] Using Monitoring version: " + Monitoring.ModuleInfo.VERSION);
 
-        _subsystemThread = new Thread(() => new SubsystemController(pollRate).Start());
+        _subsystemThread = new Thread(() => new SubsystemController(pollRate,onIrrevocableError,maxConnectionAttempts).Start());
         _subsystemThread.Start();
     }
 
@@ -37,14 +36,43 @@ public class SubsystemController
 
     private void Start()
     {
-        Console.WriteLine("[MSC] SubsystemThread is: " + _subsystemThread + "#" + _subsystemThread.GetHashCode());
-        Console.WriteLine("[MSC] Subsystem instance is: " + _instance + "#" + _instance.GetHashCode());
+        bool connectionEstablished = true;
+        bool completeConnectionFailure = false;
+        IMonitoringService monitoringService;
+        int secondsToSleepBeforeTryingAgain = 2;
+        uint failedAttempts = 0;
+        do {
+            try
+            {
+                monitoringService = new KubernetesMonitoring();
+            }
+            catch (Exception e)
+            {
+                if (failedAttempts > _maxConnectionAttempts)
+                {
+                    Console.Error.WriteLine("[MSC] Connection failed. Aborting.");
+                    _onIrrevocableError(e);
+                    completeConnectionFailure = true;
+                }
+                else
+                {
+                    connectionEstablished = false;
+                    failedAttempts++;
+                    Console.Error.WriteLine("[MSC] Unable to connect. Trying again in " + secondsToSleepBeforeTryingAgain + " seconds...");
+                    Thread.Sleep(secondsToSleepBeforeTryingAgain * 1000);
+                    secondsToSleepBeforeTryingAgain = (int) Math.Pow(secondsToSleepBeforeTryingAgain, 1.5);
+                }
+            }
+        } while (!connectionEstablished && !completeConnectionFailure);
 
+        ShouldRun = completeConnectionFailure;
+        
         while (ShouldRun)
         {
             long msLastUpdateRisingEdge = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
             
             //Stuff here
+            
 
   
             Sleep(msLastUpdateRisingEdge, _pollRate);
@@ -71,8 +99,14 @@ public class SubsystemController
         return _instance!;
     }
     
-    private SubsystemController(uint pollRate)
+    private uint _pollRate;
+    private readonly Action<Exception> _onIrrevocableError;
+    private readonly uint _maxConnectionAttempts;
+    
+    private SubsystemController(uint pollRate, Action<Exception> onIrrevocableError, uint maxConnectionAttempts)
     {
+        this._onIrrevocableError = onIrrevocableError;
+        this._maxConnectionAttempts = maxConnectionAttempts;
         this._pollRate = pollRate;
         _instance = this;
     }

@@ -12,6 +12,11 @@ public class ThreadSafeValue<T>
         this._value = value;
     }
 
+    public static ThreadSafeValue<T> Of(T value)
+    {
+        return new ThreadSafeValue<T>(value);
+    }
+
     public T Get()
     {
         lock (_mutex)
