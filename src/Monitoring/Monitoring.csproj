@@ -10,12 +10,26 @@
     <ItemGroup><!-- Add package references here -->
         <!-- Example: <PackageReference Include="Newtonsoft.Json" Version="13.0.1" /> -->
 
-        <Folder Include="Monitoring.Tests\" />
+        <Folder Include="Monitoring.Tests\"/>
     </ItemGroup>
 
     <ItemGroup><!-- Add project references here if needed -->
         <!-- Example: <ProjectReference Include="..\OtherProject\OtherProject.csproj" /> -->
-        
+
+
+        <PackageReference Include="KubernetesClient" Version="13.0.1"/>
+
+
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0"/>
+
+
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
+
+
+        <PackageReference Include="NUnit" Version="4.0.1"/>
+
+
+        <PackageReference Include="RsInstrument" Version="1.18.1"/>
     </ItemGroup>
 
 </Project>

@@ -19,4 +19,8 @@
         <ProjectReference Include="..\MonitoringSubsystem\MonitoringSubsystem.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="KubernetesClient" Version="13.0.1" />
+    </ItemGroup>
+
 </Project>
