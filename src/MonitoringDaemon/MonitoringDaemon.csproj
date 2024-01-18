@@ -7,12 +7,6 @@
         <PackageId>MonitoringDaemon</PackageId>
     </PropertyGroup>
 
-    <ItemGroup><!-- Add package references here -->
-        <!-- Example: <PackageReference Include="Newtonsoft.Json" Version="13.0.1" /> -->
-
-        <Folder Include="MonitoringSubsystem.Tests\"/>
-    </ItemGroup>
-
     <ItemGroup>
         <!-- Add project references here if needed -->
         <!-- Example: <ProjectReference Include="..\OtherProject\OtherProject.csproj" /> -->

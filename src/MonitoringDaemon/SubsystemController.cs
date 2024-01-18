@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Threading;
 using Common.Models;
 using Monitoring;
@@ -15,17 +16,16 @@ public class SubsystemController
      * Spawns a new thread, and initializes a subsystem on this thread. <br/>
      * pollRate, uint32, default = 1000, how many times a second to try and update all monitored values. 
      */
-    public static Tuple<StateCache,Exception> Init(uint pollRate = 1000, uint maxConnectionAttempts = 10)
+    public static Tuple<StateCache,Exception> Init(ConcurrentBag<Action> queueOnMain, DubiousFuncExecutor<IMonitoringService> monitoringProvider, uint pollRate = 1000, uint maxConnectionAttempts = 10)
     {
         if (_instance != null && _subsystemThread != null)
         {
-            Console.Error.WriteLine("[MSC] Ignored attempt to re-initialize already running subsystem.");
-            return null;
+            Console.Error.WriteLine("[MD] Ignored attempt to re-initialize already running subsystem.");
+            return new(null,null);
         }
-        Console.WriteLine("[MSC] Connecting & Initializing ");
-        Console.WriteLine("[MSC] Using Monitoring version: " + Monitoring.ModuleInfo.VERSION);
+        Console.WriteLine("[MD] Connecting & Initializing ");
 
-        Tuple<IMonitoringService,Exception> res = MonitoringConnector.ConnectAndGetCache(maxConnectionAttempts);
+        Tuple<IMonitoringService,Exception> res = monitoringProvider.TryExec(maxConnectionAttempts);
         if (res.Item2 != null)
         {
             return new(null, res.Item2);
@@ -33,7 +33,7 @@ public class SubsystemController
 
         StateCache cache = new StateCache(res.Item1.GetNodeNames());
         
-        _subsystemThread = new Thread(() => new SubsystemController(pollRate, res.Item1, cache).Start());
+        _subsystemThread = new Thread(() => new SubsystemController(queueOnMain, pollRate, res.Item1, cache).Start());
         _subsystemThread.Start();
 
         return new(cache, null);
@@ -56,13 +56,12 @@ public class SubsystemController
             long msLastUpdateRisingEdge = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
             
             //Stuff here
-            
 
   
             Sleep(msLastUpdateRisingEdge, _pollRate);
         }
         
-        Console.WriteLine("[MSC] Subsystem shutdown");
+        Console.WriteLine("[MD] Subsystem shutdown");
     }
 
     private void Sleep(long msLastUpdateRisingEdge, uint pollRate)
@@ -86,12 +85,14 @@ public class SubsystemController
     private readonly uint _pollRate;
     private readonly IMonitoringService _monitoringService;
     private readonly StateCache _cache;
+    private readonly ConcurrentBag<Action> _queueOnMain;
     
-    private SubsystemController(uint pollRate, IMonitoringService monitoringService, StateCache cache)
+    private SubsystemController(ConcurrentBag<Action> queueOnMain, uint pollRate, IMonitoringService monitoringService, StateCache cache)
     {
         _pollRate = pollRate;
         _monitoringService = monitoringService;
         _cache = cache;
         _instance = this;
+        _queueOnMain = queueOnMain;
     }
 }

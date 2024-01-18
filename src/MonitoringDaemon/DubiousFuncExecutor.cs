@@ -1,51 +1,59 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Threading;
 using Monitoring;
 using Common.Models;
 
 namespace MonitoringDaemon;
 
-public class MonitoringConnector
+public class DubiousFuncExecutor<T>
 {
-    public static Tuple<IMonitoringService, Exception> ConnectAndGetCache(uint maxConnectionAttempts)
+
+    public readonly Func<T> _func;
+    
+    public DubiousFuncExecutor(Func<T> func)
     {
-        IMonitoringService monitoringService = null;
+        _func = func;
+    }
+    
+    public Tuple<T?, Exception?> TryExec(uint maxAttempts)
+    {
+        T? toReturn = default(T);
+        Exception? latestError = default;
         
-        bool connectionEstablished = true;
-        bool completeConnectionFailure = false;
+        bool complete = false;
         double secondsToSleepBeforeTryingAgain = 2;
         uint failedAttempts = 0;
-        Exception latestError = null;
         
         do {
             try
             {
-                monitoringService = new KubernetesMonitoring();
+                toReturn = _func();
+                complete = true;
             }
-            catch (Exception e)
+            catch (Exception? e)
             {
                 latestError = e;
-                if (failedAttempts > maxConnectionAttempts)
+                if (failedAttempts > maxAttempts)
                 {
                     Console.Error.WriteLine("[MC] Connection failed. Aborting.");
-                    completeConnectionFailure = true;
+                    complete = true;
                 }
                 else
                 {
-                    connectionEstablished = false;
                     failedAttempts++;
                     Console.Error.WriteLine("[MC] Unable to connect. Trying again in " + Math.Round(secondsToSleepBeforeTryingAgain) + " seconds...");
                     Thread.Sleep((int) secondsToSleepBeforeTryingAgain * 1000);
                     secondsToSleepBeforeTryingAgain = Math.Pow(secondsToSleepBeforeTryingAgain, 1.5);
                 }
             }
-        } while (!connectionEstablished && !completeConnectionFailure);
+        } while (!complete);
 
-        if (monitoringService != null)
+        if (toReturn != null)
         {
-            return new(monitoringService, null);
+            return new(toReturn, null);
         }
 
-        return new(null, latestError);
+        return new(default, latestError);
     }
 }

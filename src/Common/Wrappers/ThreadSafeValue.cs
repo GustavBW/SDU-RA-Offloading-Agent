@@ -5,7 +5,6 @@ namespace MonitoringSubsystem;
 
 public class ThreadSafeValue<T>
 {
-    [JsonInclude]
     private T _value;
     private readonly object _mutex = new();
 
